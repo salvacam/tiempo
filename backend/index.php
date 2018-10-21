@@ -1,11 +1,11 @@
 <?php
+header('Content-Type: application/json; charset=utf-8');
+header("access-control-allow-origin: *");
+
 require './config.php';
 require './src/JsonDB.class.php';
 
 date_default_timezone_set('Europe/Madrid');
-
-header('Content-Type: application/json; charset=utf-8');
-header("access-control-allow-origin: *");
 
 $db = new JsonDB("./db/");
 
@@ -15,12 +15,12 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 */
 
-//if (!isset($_GET["id"]) || empty($_GET["id"])) {
+if (!isset($_GET["id"]) || empty($_GET["id"])) {
 	$rtn = array("error" => "Falta identificador de la ciudad o localidad");
     http_response_code(500);
     print json_encode($rtn);
 	die();
-//}
+}
 
 $idCiudad = urlencode($_GET["id"]);
 
