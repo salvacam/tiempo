@@ -3,9 +3,10 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 var app = {  
-    tiempo: null,     
-  	note: document.getElementById('note'),
+    tiempo: null,
+    fechaHora: new Date(),
   	actualizar: document.getElementById('actualizar'),
+    principalDiv: document.getElementById('principalDiv'),
 
     URL_SERVER: 'https://calcicolous-moonlig.000webhostapp.com/tiempo/index.php?id=',
     //URL_SERVER: 'http://localhost:1212/index.php?id=',
@@ -19,7 +20,7 @@ var app = {
 
         // JS devuelve la hora actual en milisegundos, en PHP lo devuelve en segundos
         // la hora la paso a String le quito los 3 últimos caracteres y lo paso a número
-        let horaActual = new Date().getTime();
+        let horaActual = app.fechaHora.getTime();
         horaActual = horaActual.toString();
         horaActual = horaActual.slice(0,-3);
         horaActual = Number(horaActual);
@@ -28,7 +29,6 @@ var app = {
         if (horaActual > (app.tiempo.hora + 7200)) {
             app.realizarLlamada();            
         } else {
-          // TODO dibujar tablar
           app.drawTable();
         }
       } else {
@@ -61,22 +61,21 @@ var app = {
             app.drawTable();
           })
           .catch(function() {
-            console.log('error al formatear los datos');
+            //console.log('error al formatear los datos');
             app.obtenerDatosGuardados();
           });
       } else {      
-        console.log('error al obtener los datos');
+        //console.log('error al obtener los datos');
         app.obtenerDatosGuardados();        
       }
     })
     .catch(function() {
-      console.log('error al obtener los datos');
+      //console.log('error al obtener los datos');
       app.obtenerDatosGuardados();      
     });
   },
 
   obtenerDatosGuardados: function() {
-    // TODO aviso error al obtener los datos
     app.modal.classList.remove('hide');    
     document.getElementById('closeModal').addEventListener('click', () => {
         app.modal.classList.add('hide');
@@ -89,9 +88,9 @@ var app = {
   },
 
   drawTable: function() {
-    if (app.tiempo.dia != undefined && app.tiempo.dia.length > 0) {
-      let noteItem = app.drawData();      
-      app.note.value = noteItem.toString();
+    if (app.tiempo.dia != undefined && app.tiempo.dia.length > 0) {      
+      let noteItem = app.drawData();
+      app.principalDiv.innerHTML = noteItem;
     } else {
       // TODO aviso
       //alert('No carga');
@@ -100,18 +99,52 @@ var app = {
 
   drawData: function(estado, element) {
     let exit = "";
-    app.tiempo.dia.forEach(function(element) {
-        exit += element.fecha;
-        exit += "\n";
+    app.tiempo.dia.forEach(function(element) {      
+        if (app.compareDate(element.fecha)) {
+          exit += "<div class='titleDate'>" + app.formatDate(element.fecha) + "</div>";
+          exit += "<div class='amanecer'>" + 
+                  "<span class='orto'>Amanecer: " + element.orto + "</span> - " + 
+                  "<span class='ocaso'>Puesta: " + element.ocaso + "</span></div>";
 
-        element.estadoCielo.forEach(function(estado, index) {
-          exit += estado.periodo + ":00 - " + estado.descripcion + " - " + element.temperatura[index].value + "º - " + element.precipitacion[index].value;
-          exit += "\n";
-        });
+          exit += "<div class='titleHeader'>" +
+                  "<span class='time'>Hora</span> - " +
+                  "<span class='status'>Estado</span> - " + 
+                  "<span class='temp'>Temp.</span> - " +
+                  "<span class='rain'>LLuvia</span></div>";
 
-        exit += "\n";
-        exit += "\n";
+          element.estadoCielo.forEach(function(estado, index) {
+            // Se muestran los datos si el día en el que se recorre no es hoy
+            // o si es hoy pero la hora aún no ha pasado
+            if (app.fechaHora.getDate() !== parseInt(element.fecha.substring(8,10)) || //Día distinto
+              (app.fechaHora.getDate() === parseInt(element.fecha.substring(8,10)) &&
+                 app.fechaHora.getHours() <= parseInt(estado.periodo))) {            
+              exit += "<div class='contentData'>" + 
+                      "<span class='time'>" + estado.periodo + ":00" + "</span> - " +
+                      "<span class='status'>" + estado.descripcion + "</span> - " + 
+                      "<span class='temp'>" + element.temperatura[index].value + "º" + "</span> - " +
+                      "<span class='rain'>" + element.precipitacion[index].value + "</span></div>";              
+            }
+          });
+        }
       });
     return exit;
+  },
+
+  formatDate: function(str) {
+    //str = "2018-10-22"
+    return str.substring(8,10) + "-" + str.substring(5,7) + "-" + str.substring(0,4);
+  },
+
+  compareDate: function(str) {
+    let d = new Date(
+      parseInt(str.substring(0,4)), 
+      (parseInt(str.substring(5,7)) - 1), 
+      parseInt(str.substring(8,10)),
+      23,
+      59,
+      59
+    );
+    return d >= app.fechaHora;
   }
+
 };
