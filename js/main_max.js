@@ -8,8 +8,8 @@ var app = {
   	actualizar: document.getElementById('actualizar'),
     principalDiv: document.getElementById('principalDiv'),
 
-    //URL_SERVER: 'https://calcicolous-moonlig.000webhostapp.com/tiempo/index.php?id=',
-    URL_SERVER: 'http://localhost:1212/index.php?id=',
+    URL_SERVER: 'https://calcicolous-moonlig.000webhostapp.com/tiempo/index.php?id=',
+    //URL_SERVER: 'http://localhost:1212/index.php?id=',
 
   	modal: document.getElementById('modal'),
 
