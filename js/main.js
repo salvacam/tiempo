@@ -17,6 +17,7 @@ var app = {
 
       if(localStorage.getItem("_tiempo")){
         app.tiempo = JSON.parse(localStorage.getItem("_tiempo"));
+        app.drawTable();
 
         // JS devuelve la hora actual en milisegundos, en PHP lo devuelve en segundos
         // la hora la paso a String le quito los 3 últimos caracteres y lo paso a número
@@ -28,8 +29,6 @@ var app = {
         //Two hours, 60 seg * 60 min * 2 hour
         if (horaActual > (app.tiempo.hora + 7200)) {
             app.realizarLlamada();            
-        } else {
-          app.drawTable();
         }
       } else {
         app.realizarLlamada();
