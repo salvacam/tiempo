@@ -103,13 +103,13 @@ var app = {
         if (app.compareDate(element.fecha)) {
           exit += "<div class='titleDate'>" + app.formatDate(element.fecha) + "</div>";
           exit += "<div class='amanecer'>" + 
-                  "<span class='orto'>Amanecer: " + element.orto + "</span> - " + 
+                  "<span class='orto'>Amanecer: " + element.orto + "</span>" + 
                   "<span class='ocaso'>Puesta: " + element.ocaso + "</span></div>";
 
           exit += "<div class='titleHeader'>" +
-                  "<span class='time'>Hora</span> - " +
-                  "<span class='status'>Estado</span> - " + 
-                  "<span class='temp'>Temp.</span> - " +
+                  "<span class='time'>Hora</span>" +
+                  "<span class='status'>Estado</span>" + 
+                  "<span class='temp'>Temp.</span>" +
                   "<span class='rain'>LLuvia</span></div>";
 
           element.estadoCielo.forEach(function(estado, index) {
@@ -119,9 +119,9 @@ var app = {
               (app.fechaHora.getDate() === parseInt(element.fecha.substring(8,10)) &&
                  app.fechaHora.getHours() <= parseInt(estado.periodo))) {            
               exit += "<div class='contentData'>" + 
-                      "<span class='time'>" + estado.periodo + ":00" + "</span> - " +
-                      "<span class='status'>" + estado.descripcion + "</span> - " + 
-                      "<span class='temp'>" + element.temperatura[index].value + "º" + "</span> - " +
+                      "<span class='time'>" + estado.periodo + ":00" + "</span>" +
+                      "<span class='status'>" + estado.descripcion + "</span>" + 
+                      "<span class='temp'>" + element.temperatura[index].value + "º" + "</span>" +
                       "<span class='rain'>" + element.precipitacion[index].value + "</span></div>";              
             }
           });
