@@ -40,6 +40,7 @@ if (count($datosGuardados) > 0) {
 	}
 }
 
+//Pedir los datos por horas
 $urlOpendata = "https://opendata.aemet.es/opendata/api/prediccion/especifica/municipio/horaria/" . $idCiudad .  "/?api_key=" . $apiKey;
 
 $result = file_get_contents($urlOpendata);
@@ -68,8 +69,31 @@ if (array_key_exists("prediccion",$jsonDatos[0]) && array_key_exists("dia",$json
 	$dia = $jsonDatos[0]['prediccion']['dia'];
 }
 
+//Pedir los datos por días
+$urlOpendata = "https://opendata.aemet.es/opendata/api/prediccion/especifica/municipio/diaria/" . $idCiudad .  "/?api_key=" . $apiKey;
+
+$result = file_get_contents($urlOpendata);
+$codificado = utf8_encode($result);
+$jsonDatos = json_decode($codificado, true);
+
+if($jsonDatos['estado'] !== 200) {
+	$rtn = array("error" => "No se pueden obtener los datos");
+    http_response_code(200);
+    print json_encode($rtn);
+	die();
+}
+
+$result = file_get_contents($jsonDatos['datos']);
+$codificado = utf8_encode($result);
+$jsonDatos = json_decode($codificado, true);
+
+$semana = array();
+if (array_key_exists("prediccion",$jsonDatos[0]) && array_key_exists("dia",$jsonDatos[0]['prediccion'])) {
+	$semana = $jsonDatos[0]['prediccion']['dia'];
+}
+
 // Guardar fecha y hora cuando se realiza la llamada
-$lista = array('id'=>$idCiudad, 'nombre'=> $nombre, 'hora'=>$fechaHoraActual, 'dia' => $dia);
+$lista = array('id'=>$idCiudad, 'nombre'=> $nombre, 'hora'=>$fechaHoraActual, 'dia' => $dia, 'semana' => $semana);
 
 // Guardar resultado procesado de la llamada
 $db->insert("ciudad", $lista, true);

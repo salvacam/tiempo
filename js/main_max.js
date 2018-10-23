@@ -8,8 +8,8 @@ var app = {
   	actualizar: document.getElementById('actualizar'),
     principalDiv: document.getElementById('principalDiv'),
 
-    URL_SERVER: 'https://calcicolous-moonlig.000webhostapp.com/tiempo/index.php?id=',
-    //URL_SERVER: 'http://localhost:1212/index.php?id=',
+    //URL_SERVER: 'https://calcicolous-moonlig.000webhostapp.com/tiempo/index.php?id=',
+    URL_SERVER: 'http://localhost:1212/index.php?id=',
 
   	modal: document.getElementById('modal'),
 
@@ -98,8 +98,10 @@ var app = {
 
   drawData: function(estado, element) {
     let exit = "";
+    let lastDay = "";
     app.tiempo.dia.forEach(function(element) {      
         if (app.compareDate(element.fecha)) {
+          lastDay = element.fecha;
           exit += "<div class='titleDate'>" + app.formatDate(element.fecha) + "</div>";
           exit += "<div class='amanecer'>" + 
                   "<span class='orto'>Amanecer: " + element.orto + "</span>" + 
@@ -126,7 +128,32 @@ var app = {
           });
         }
       });
+
+    app.tiempo.semana.forEach(function(element) {
+        if (app.compareDate(element.fecha) && 
+            app.fechaHora.getDate() !== parseInt(element.fecha.substring(8,10))){
+          exit += "<div class='titleDate'>" + app.formatDate(element.fecha) + "</div>";
+          
+          exit += "<div class='titleHeader'>" +
+                  "<span class='time'>Hora</span>" +
+                  "<span class='status'>Estado</span>" + 
+                  "<span class='temp'>Temp.</span>" +
+                  "<span class='rain'>LLuvia</span></div>";
+
+          element.estadoCielo.forEach(function(estado, index) {                  
+            exit += "<div class='contentData'>" + 
+                    "<span class='time'>" + app.formatTime(estado) + "</span>" +
+                    "<span class='status'>" + estado.descripcion + "</span>"+ 
+                    "<span class='temp'>" + element.temperatura.maxima + "º/" + element.temperatura.minima + "º" + "</span>" +
+                    "<span class='rain'>" + element.probPrecipitacion[index].value + "</span></div>";
+          });
+        }
+      });
     return exit;
+  },
+
+  formatTime: function(estado) {
+    return estado.periodo != undefined ? estado.periodo : "00-24";
   },
 
   formatDate: function(str) {
