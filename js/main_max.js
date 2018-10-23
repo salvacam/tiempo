@@ -129,7 +129,8 @@ var app = {
         }
       });
 
-    app.tiempo.semana.forEach(function(element) {
+    if (app.tiempo.semana !== undefined) {
+      app.tiempo.semana.forEach(function(element) {
         if (app.compareDate(element.fecha) && 
             app.fechaHora.getDate() !== parseInt(element.fecha.substring(8,10))){
           exit += "<div class='titleDate'>" + app.formatDate(element.fecha) + "</div>";
@@ -149,6 +150,7 @@ var app = {
           });
         }
       });
+    }
     return exit;
   },
 
