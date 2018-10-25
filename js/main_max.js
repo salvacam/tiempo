@@ -103,9 +103,11 @@ var app = {
       app.tiempo.semana.forEach(function(element) {
         if (element.estadoCielo.length === 7) {
           element.estadoCielo = element.estadoCielo.slice(3,7); 
+          element.probPrecipitacion = element.probPrecipitacion.slice(3,7); 
         }
         if (element.estadoCielo.length === 3) {
           element.estadoCielo = element.estadoCielo.slice(1,3); 
+          element.probPrecipitacion = element.probPrecipitacion.slice(1,3); 
         }
 	if (app.compareDate(element.fecha)){ // TODO no mostrar datos si la hora ya ha pasado
           exit += "<div class='titleDate'>" + app.formatDate(element.fecha) + "</div>";
