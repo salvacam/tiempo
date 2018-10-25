@@ -107,8 +107,6 @@ var app = {
         if (element.estadoCielo.length === 3) {
           element.estadoCielo = element.estadoCielo.slice(1,3); 
         }
-        if (app.compareDate(element.fecha) && 
-            app.fechaHora.getDate() !== parseInt(element.fecha.substring(8,10))){
           exit += "<div class='titleDate'>" + app.formatDate(element.fecha) + "</div>";
           
           exit += "<div class='titleHeader'>" +
@@ -123,8 +121,7 @@ var app = {
                     "<span class='status'>" + estado.descripcion + "</span>"+ 
                     "<span class='temp'>" + element.temperatura.maxima + "/" + element.temperatura.minima + "º" + "</span>" +
                     "<span class='rain'>" + element.probPrecipitacion[index].value + "</span></div>";
-          });
-        }
+          });        
       });
     }
     if (exit !== "") {
