@@ -107,7 +107,7 @@ var app = {
         if (element.estadoCielo.length === 3) {
           element.estadoCielo = element.estadoCielo.slice(1,3); 
         }
-	if (app.compareDate(element.fecha)){
+	if (app.compareDate(element.fecha)){ // TODO no mostrar datos si la hora ya ha pasado
           exit += "<div class='titleDate'>" + app.formatDate(element.fecha) + "</div>";
           
           exit += "<div class='titleHeader'>" +
