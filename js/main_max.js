@@ -101,15 +101,16 @@ var app = {
 
     if (app.tiempo.semana !== undefined) {
       app.tiempo.semana.forEach(function(element) {
-        if (element.estadoCielo.length === 7) {
-          element.estadoCielo = element.estadoCielo.slice(3,7); 
-          element.probPrecipitacion = element.probPrecipitacion.slice(3,7); 
-        }
-        if (element.estadoCielo.length === 3) {
-          element.estadoCielo = element.estadoCielo.slice(1,3); 
-          element.probPrecipitacion = element.probPrecipitacion.slice(1,3); 
-        }
-	if (app.compareDate(element.fecha)){ // TODO no mostrar datos si la hora ya ha pasado
+        if (app.compareDate(element.fecha)){ 
+
+          if (element.estadoCielo.length === 7) {
+            element.estadoCielo = element.estadoCielo.slice(3,7); 
+            element.probPrecipitacion = element.probPrecipitacion.slice(3,7); 
+          }
+          if (element.estadoCielo.length === 3) {
+            element.estadoCielo = element.estadoCielo.slice(1,3); 
+            element.probPrecipitacion = element.probPrecipitacion.slice(1,3); 
+          }
           exit += "<div class='titleDate'>" + app.formatDate(element.fecha) + "</div>";
           
           exit += "<div class='titleHeader'>" +
@@ -118,14 +119,17 @@ var app = {
                   "<span class='temp'>Temp.</span>" +
                   "<span class='rain'>LLuvia</span></div>";
 
-          element.estadoCielo.forEach(function(estado, index) {                  
-            exit += "<div class='contentData'>" + 
-                    "<span class='time'>" + app.formatTime(estado) + "</span>" +
-                    "<span class='status'>" + estado.descripcion + "</span>"+ 
-                    "<span class='temp'>" + element.temperatura.maxima + "/" + element.temperatura.minima + "º" + "</span>" +
-                    "<span class='rain'>" + element.probPrecipitacion[index].value + "</span></div>";
+          element.estadoCielo.forEach(function(estado, index) { // TODO no mostrar datos si la hora ya ha pasado
+            if(estado.periodo === undefined || 
+              (estado.periodo !== undefined && parseInt(estado.periodo.substring(3,5)) >= app.fechaHora.getHours())){
+              exit += "<div class='contentData'>" + 
+                      "<span class='time'>" + app.formatTime(estado) + "</span>" +
+                      "<span class='status'>" + estado.descripcion + "</span>"+ 
+                      "<span class='temp'>" + element.temperatura.maxima + "/" + element.temperatura.minima + "º" + "</span>" +
+                      "<span class='rain'>" + element.probPrecipitacion[index].value + "</span></div>";
+            }
           });
-	}
+        }
       });
     }
     if (exit !== "") {
