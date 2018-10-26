@@ -22,6 +22,7 @@
 		textarea:hover,textarea{width:100%;height:100%;font-size:18px;outline:none;box-shadow:none;-webkit-box-shadow:none;-moz-box-shadow:none;outline:0!important;-webkit-appearance:none;resize:none;background:0;border-radius:0;border:none;margin:0}
 		.labelHide{height:0;width:0;overflow:hidden;display:block;}.hide{display:none}
 		.container>div{display:flex;justify-content:center;margin-left:5px;margin-right:5px}.container>div>span{text-align:center}span.status{width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}span.status:hover{overflow:visible}span.time{width:55px;}span.temp,span.rain{width:45px}.titleDate{background:#112233;color:#FFF;padding:0px 2px;}.amanecer{justify-content:space-around;}.titleDate,.amanecer{margin-bottom:10px;}.titleHeader,.contentData{margin-bottom: 5px;}.contentData+.titleDate{margin-top:10px;}.container>div.amanecer{justify-content:space-around;justify-content:space-evenly}
+		@keyframes spinner {to {transform: rotate(360deg);}}.rotate .icon_svg{-webkit-animation:spinner .5s infinite linear;animation:spinner .5s infinite linear}
 
   	</style>
 
@@ -40,7 +41,9 @@
 		<h3>
 			<img src="img/icon.png" alt="icon" height="24">El Tiempo 
 		</h3>                    
-		<a id="actualizar" class="btn">Actualizar</a>	
+		<a id="actualizar" class="btn">
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon_svg"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+		Actualizar</a>	
 	</header>
 
 	<div id="modal" class="hide modal">

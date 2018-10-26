@@ -34,20 +34,20 @@ var app = {
         app.realizarLlamada();
       }
 
-	  	app.actualizar.addEventListener('click', (event) => {
-        app.realizarLlamada();
-      });
+      app.actualizar.addEventListener('click', app.realizarLlamada);
 
-		if ('serviceWorker' in navigator) {
-  		navigator.serviceWorker
-    		.register('service-worker.js')
-    		.then(function() {
-      		//console.log('Service Worker Registered');
-      	});
-		}
-	}, 
+  		if ('serviceWorker' in navigator) {
+    		navigator.serviceWorker
+      		.register('service-worker.js')
+      		.then(function() {
+        		//console.log('Service Worker Registered');
+        	});
+  		}
+	},
 
   realizarLlamada: function() {
+    app.actualizar.removeEventListener('click', app.realizarLlamada);
+    app.actualizar.classList.add('rotate');
     let request = new Request(app.URL_SERVER+'18087');
 
     fetch(request).then((results) => {
@@ -75,6 +75,8 @@ var app = {
   },
 
   obtenerDatosGuardados: function() {
+    app.actualizar.classList.remove('rotate');
+    app.encenderBoton();
     app.modal.classList.remove('hide');    
     document.getElementById('closeModal').addEventListener('click', () => {
         app.modal.classList.add('hide');
@@ -86,7 +88,9 @@ var app = {
     }
   },
 
-  drawTable: function() {
+  drawTable: function() {    
+    app.actualizar.addEventListener('click', app.realizarLlamada);
+    app.actualizar.classList.remove('rotate');
     if (app.tiempo.dia != undefined && app.tiempo.dia.length > 0) {      
       let noteItem = app.drawData();
       app.principalDiv.innerHTML = noteItem;
