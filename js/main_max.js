@@ -5,7 +5,9 @@ document.addEventListener('DOMContentLoaded', function () {
 var app = {  
     tiempo: null,
     fechaHora: new Date(),
-  	actualizar: document.getElementById('actualizar'),
+    actualizar: document.getElementById('actualizar'),
+    accionHoras: undefined,
+  	horas: undefined,
     principalDiv: document.getElementById('principalDiv'),
 
     URL_SERVER: 'https://calcicolous-moonlig.000webhostapp.com/tiempo/index.php?id=',
@@ -34,7 +36,7 @@ var app = {
         app.realizarLlamada();
       }
 
-      app.actualizar.addEventListener('click', app.realizarLlamada);
+      app.actualizar.addEventListener('click', app.realizarLlamada);      
 
   		if ('serviceWorker' in navigator) {
     		navigator.serviceWorker
@@ -94,6 +96,10 @@ var app = {
     if (app.tiempo.dia != undefined && app.tiempo.dia.length > 0) {      
       let noteItem = app.drawData();
       app.principalDiv.innerHTML = noteItem;
+
+      app.accionHoras = document.getElementById('accionHoras');
+      app.horas = document.getElementById('horas');
+      app.accionHoras.addEventListener('click', app.mostrarHoras);
     } else {
       // TODO aviso
       //alert('No carga');
@@ -123,9 +129,13 @@ var app = {
                   "<span class='temp'>Temp.</span>" +
                   "<span class='rain'>LLuvia</span></div>";
 
-          element.estadoCielo.forEach(function(estado, index) { // TODO no mostrar datos si la hora ya ha pasado
-            if(estado.periodo === undefined || 
-              (estado.periodo !== undefined && parseInt(estado.periodo.substring(3,5)) >= app.fechaHora.getHours())){
+          element.estadoCielo.forEach(function(estado, index) {
+
+            // Se muestran los datos si el día en el que se recorre no es hoy
+            // o si es hoy pero la hora aún no ha pasado
+            if (app.fechaHora.getDate() !== parseInt(element.fecha.substring(8,10)) || //Día distinto
+              (estado.periodo === undefined || 
+              (estado.periodo !== undefined && parseInt(estado.periodo.substring(3,5)) >= app.fechaHora.getHours()))) {
               exit += "<div class='contentData'>" + 
                       "<span class='time'>" + app.formatTime(estado) + "</span>" +
                       "<span class='status'>" + estado.descripcion + "</span>"+ 
@@ -136,8 +146,11 @@ var app = {
         }
       });
     }
+    let datosSemana = false;
     if (exit !== "") {
-      exit += "<div class='separator titleDate'>Por horas</div>";
+      datosSemana = true;      
+      exit += "<div class='separator titleDate' id='accionHoras'>Por horas</div>";
+      exit += "<div class='hide' id='horas'>";
     }
 
     app.tiempo.dia.forEach(function(element) {      
@@ -170,7 +183,14 @@ var app = {
         }
       });
 
+    if (datosSemana) {
+      exit+="</div>";
+    }
     return exit;
+  },
+
+  mostrarHoras: function(estado) {
+    app.horas.classList.toggle('hide');
   },
 
   formatTime: function(estado) {
