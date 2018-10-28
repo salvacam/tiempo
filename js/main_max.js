@@ -140,7 +140,7 @@ var app = {
                       "<span class='time'>" + app.formatTime(estado) + "</span>" +
                       "<span class='status'>" + estado.descripcion + "</span>"+ 
                       "<span class='temp'>" + element.temperatura.maxima + "/" + element.temperatura.minima + "º" + "</span>" +
-                      "<span class='rain'>" + element.probPrecipitacion[index].value + "</span></div>";
+                      "<span class='rain'>" + element.probPrecipitacion[index].value + "%</span></div>";
             }
           });
         }
@@ -177,7 +177,7 @@ var app = {
                       "<span class='time'>" + estado.periodo + ":00" + "</span>" +
                       "<span class='status'>" + estado.descripcion + "</span>" + 
                       "<span class='temp'>" + element.temperatura[index].value + "º" + "</span>" +
-                      "<span class='rain'>" + element.precipitacion[index].value + "</span></div>";              
+                      "<span class='rain'>" + element.precipitacion[index].value + "</span></div>";
             }
           });
         }
