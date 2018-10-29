@@ -137,7 +137,7 @@ var app = {
                           <div class='rain'>${element.probPrecipitacion[index].value}%</div>
                         </div>
                         <div class='icon'><img alt="${estado.descripcion}" 
-                          src="http://www.aemet.es/imagenes_gcd/_iconos_municipios/${estado.value}.png" 
+                          src="./img/weather/${estado.value}.png"
                           title="${estado.descripcion}"></div>
                         <div class='time'>${app.formatTime(estado)}</div>
                       </div>`;
@@ -179,7 +179,7 @@ var app = {
                           <div class='rain'>${element.precipitacion[index].value}%</div>
                         </div>
                         <div class='icon'><img alt="${estado.descripcion}" 
-                          src="http://www.aemet.es/imagenes_gcd/_iconos_municipios/${estado.value}.png" 
+                          src="./img/weather/${estado.value}.png"
                           title="${estado.descripcion}"></div>
                         <div class='time'>${estado.periodo}:00</div>
                       </div>`;
