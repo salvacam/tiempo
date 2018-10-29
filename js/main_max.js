@@ -137,7 +137,7 @@ var app = {
                           <div class='rain'>${element.probPrecipitacion[index].value}%</div>
                         </div>
                         <div class='icon'><img alt="${estado.descripcion}" 
-                          src="./img/weather/${estado.value}.png"
+                          src="./img/weather/${estado.value}_g.png"
                           title="${estado.descripcion}"></div>
                         <div class='time'>${app.formatTime(estado)}</div>
                       </div>`;
@@ -176,20 +176,13 @@ var app = {
               exit += `<div class='card'>
                         <div class='card-row'>
                           <div class='temp'>${element.temperatura[index].value}º</div>
-                          <div class='rain'>${element.precipitacion[index].value}%</div>
+                          <div class='rain'>${element.precipitacion[index].value} mm</div>
                         </div>
                         <div class='icon'><img alt="${estado.descripcion}" 
-                          src="./img/weather/${estado.value}.png"
+                          src="./img/weather/${estado.value}_g.png"
                           title="${estado.descripcion}"></div>
                         <div class='time'>${estado.periodo}:00</div>
                       </div>`;
-/*
-              exit += `<div class='contentData'> 
-                      <span class='time'>${estado.periodo}:00</span>
-                      <span class='status'>${estado.descripcion}</span> 
-                      <span class='temp'>${element.temperatura[index].value}º</span>
-                      <span class='rain'>${element.precipitacion[index].value}</span></div>`;
-                      */
             }
           });
 
