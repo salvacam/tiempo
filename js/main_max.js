@@ -176,7 +176,7 @@ var app = {
               exit += `<div class='card'>
                         <div class='card-row'>
                           <div class='temp'>${element.temperatura[index].value}º</div>
-                          <div class='rain'>${element.precipitacion[index].value} mm</div>
+                          ${app.formatRain(element.precipitacion[index].value)}
                         </div>
                         <div class='icon'><img alt="${estado.descripcion}" 
                           src="./img/weather/${estado.value}_g.png"
@@ -198,6 +198,13 @@ var app = {
 
   mostrarHoras: function(estado) {
     app.horas.classList.toggle('hide');
+  },
+
+  formatRain: function(rain){
+    if (rain !== "Ip") {
+      rain += " mm";
+    }
+    return `<div class='rain'>${rain}</div>`;
   },
 
   formatTime: function(estado) {
