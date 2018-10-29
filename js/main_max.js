@@ -121,14 +121,9 @@ var app = {
             element.estadoCielo = element.estadoCielo.slice(1,3); 
             element.probPrecipitacion = element.probPrecipitacion.slice(1,3); 
           }
-          exit += "<div class='titleDate'>" + app.formatDate(element.fecha) + "</div>";
-          
-          exit += "<div class='titleHeader'>" +
-                  "<span class='time'>Hora</span>" +
-                  "<span class='status'>Estado</span>" + 
-                  "<span class='temp'>Temp.</span>" +
-                  "<span class='rain'>LLuvia</span></div>";
+          exit += app.formatDate(element.fecha);
 
+          exit += `<div class='card-container'>`;
           element.estadoCielo.forEach(function(estado, index) {
 
             // Se muestran los datos si el día en el que se recorre no es hoy
@@ -136,50 +131,69 @@ var app = {
             if (app.fechaHora.getDate() !== parseInt(element.fecha.substring(8,10)) || //Día distinto
               (estado.periodo === undefined || 
               (estado.periodo !== undefined && parseInt(estado.periodo.substring(3,5)) >= app.fechaHora.getHours()))) {
-              exit += "<div class='contentData'>" + 
-                      "<span class='time'>" + app.formatTime(estado) + "</span>" +
-                      "<span class='status'>" + estado.descripcion + "</span>"+ 
-                      "<span class='temp'>" + element.temperatura.maxima + "/" + element.temperatura.minima + "º" + "</span>" +
-                      "<span class='rain'>" + element.probPrecipitacion[index].value + "%</span></div>";
+              exit += `<div class='card'>
+                        <div class='card-row'>
+                          <div class='temp'>${element.temperatura.maxima}/${element.temperatura.minima}º</div>
+                          <div class='rain'>${element.probPrecipitacion[index].value}%</div>
+                        </div>
+                        <div class='icon'><img alt="${estado.descripcion}" 
+                          src="http://www.aemet.es/imagenes_gcd/_iconos_municipios/${estado.value}.png" 
+                          title="${estado.descripcion}"></div>
+                        <div class='time'>${app.formatTime(estado)}</div>
+                      </div>`;
             }
           });
+          exit += `</div>`;
+
+          //http://www.aemet.es/imagenes_gcd/_iconos_municipios/54.png
         }
       });
     }
     let datosSemana = false;
     if (exit !== "") {
       datosSemana = true;      
-      exit += "<div class='separator titleDate' id='accionHoras'>Por horas</div>";
-      exit += "<div class='hide' id='horas'>";
+      exit += `<div class='separator titleDate' id='accionHoras'>Por horas</div>
+              <div class='hide' id='horas'>`;
     }
 
     app.tiempo.dia.forEach(function(element) {      
         if (app.compareDate(element.fecha)) {
           lastDay = element.fecha;
-          exit += "<div class='titleDate'>" + app.formatDate(element.fecha) + "</div>";
-          exit += "<div class='amanecer'>" + 
-                  "<span class='orto'>Amanecer: " + element.orto + "</span>" + 
-                  "<span class='ocaso'>Puesta: " + element.ocaso + "</span></div>";
+          exit += app.formatDate(element.fecha);
+          exit += `<div class='amanecer'>
+                  <span class='orto'>Amanecer: ${element.orto}</span> 
+                  <span class='ocaso'>Puesta: ${element.ocaso}</span></div>`;
 
-          exit += "<div class='titleHeader'>" +
-                  "<span class='time'>Hora</span>" +
-                  "<span class='status'>Estado</span>" + 
-                  "<span class='temp'>Temp.</span>" +
-                  "<span class='rain'>LLuvia</span></div>";
 
+          exit += `<div class='card-container'>`;
           element.estadoCielo.forEach(function(estado, index) {
             // Se muestran los datos si el día en el que se recorre no es hoy
             // o si es hoy pero la hora aún no ha pasado
             if (app.fechaHora.getDate() !== parseInt(element.fecha.substring(8,10)) || //Día distinto
               (app.fechaHora.getDate() === parseInt(element.fecha.substring(8,10)) &&
-                 app.fechaHora.getHours() <= parseInt(estado.periodo))) {            
-              exit += "<div class='contentData'>" + 
-                      "<span class='time'>" + estado.periodo + ":00" + "</span>" +
-                      "<span class='status'>" + estado.descripcion + "</span>" + 
-                      "<span class='temp'>" + element.temperatura[index].value + "º" + "</span>" +
-                      "<span class='rain'>" + element.precipitacion[index].value + "</span></div>";
+                 app.fechaHora.getHours() <= parseInt(estado.periodo))) {
+
+              exit += `<div class='card'>
+                        <div class='card-row'>
+                          <div class='temp'>${element.temperatura[index].value}º</div>
+                          <div class='rain'>${element.precipitacion[index].value}%</div>
+                        </div>
+                        <div class='icon'><img alt="${estado.descripcion}" 
+                          src="http://www.aemet.es/imagenes_gcd/_iconos_municipios/${estado.value}.png" 
+                          title="${estado.descripcion}"></div>
+                        <div class='time'>${estado.periodo}:00</div>
+                      </div>`;
+/*
+              exit += `<div class='contentData'> 
+                      <span class='time'>${estado.periodo}:00</span>
+                      <span class='status'>${estado.descripcion}</span> 
+                      <span class='temp'>${element.temperatura[index].value}º</span>
+                      <span class='rain'>${element.precipitacion[index].value}</span></div>`;
+                      */
             }
           });
+
+          exit += `</div>`;
         }
       });
 
@@ -194,12 +208,18 @@ var app = {
   },
 
   formatTime: function(estado) {
-    return estado.periodo != undefined ? estado.periodo : "00-24";
+    if(estado.periodo === undefined) {
+      return "00-24 h";
+    } else if (estado.periodo.length <=2) {
+      return estado.periodo;
+    }
+      return estado.periodo + " h";
+    //return estado.periodo != undefined ? estado.periodo : "00-24 h";
   },
 
   formatDate: function(str) {
     //str = "2018-10-22"
-    return str.substring(8,10) + "-" + str.substring(5,7) + "-" + str.substring(0,4);
+    return `<div class='titleDate'>${str.substring(8,10)}-${str.substring(5,7)}-${str.substring(0,4)}</div>`;
   },
 
   compareDate: function(str) {

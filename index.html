@@ -24,6 +24,12 @@
 		.container>div:not(#horas),#horas>div{display:flex;justify-content:center;margin-left:5px;margin-right:5px}.container>div>span{text-align:center}#accionHoras{height:30px;align-items:center;cursor:pointer;}span.status{width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}span.status:hover{overflow:visible}span.time{width:55px;}span.temp,span.rain{width:45px}.titleDate{background:#112233;color:#FFF;padding:0px 2px;}#horas>div.amanecer{display:flex;justify-content:space-around;}.titleDate,.amanecer{margin-bottom:10px;}.titleHeader{font-style:italic;text-decoration:underline;}.titleHeader,.contentData{margin-bottom: 5px;}.contentData{font-weight:800}.contentData+.titleDate{margin-top:10px;}.container>div.amanecer{justify-content:space-around;justify-content:space-evenly}
 		@keyframes spinner {to {transform: rotate(360deg);}}.rotate .icon_svg{-webkit-animation:spinner .5s infinite linear;animation:spinner .5s infinite linear}
 
+		.container>div.card-container, #horas>div.card-container{display: flex; justify-content: start !important; overflow-x: auto; overflow-y: hidden;}
+		.card{display:flex;flex-wrap: wrap; width:100px; min-width: 100px; justify-content:center; margin: 0 auto;font-weight: 800;}
+		.card > div:not(.card-row) {display:flex; width:100%; justify-content: center;}
+		.card > div.card-row {display:flex; width:100%;justify-content: space-around;}
+		.card img {width: 50px;height: 50px;}
+
   	</style>
 
     <link rel="manifest" href="./manifest.json">
@@ -53,7 +59,7 @@
 
     <div class="container principal" id="principalDiv"></div>
     
-	<script type="text/javascript" charset="utf-8" src="js/main.js"></script>
+	<script type="text/javascript" charset="utf-8" src="js/main_max.js"></script>
 
 </body>
 </html>
