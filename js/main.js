@@ -27,6 +27,6 @@ exit+=`<div class='card'>
                           title="${estado.descripcion}"></div>
                         <div class='time'>${estado.periodo}:00</div>
                       </div>`}});exit+=`</div>`}});if(datosSemana){exit+="</div>"}
-return exit},mostrarHoras:function(estado){app.horas.classList.toggle('hide')},formatRain:function(rain){if(rain!=="Ip"){return `<div class='rain'>${rain} <span class="min">mm</span></div>`}
+return exit},mostrarHoras:function(estado){app.horas.classList.toggle('hide')},formatRain:function(rain){if(rain!=="Ip"){return `<div class='rain'>${rain}<span class="min">mm</span></div>`}
 return `<div class='rain'>${rain}</div>`},formatTime:function(estado){if(estado.periodo===undefined){return"00-24 h"}else if(estado.periodo.length<=2){return estado.periodo}
 return estado.periodo+" h"},formatDate:function(str){return `<div class='titleDate'>${str.substring(8,10)}-${str.substring(5,7)}-${str.substring(0,4)}</div>`},compareDate:function(str){let d=new Date(parseInt(str.substring(0,4)),(parseInt(str.substring(5,7))-1),parseInt(str.substring(8,10)),23,59,59);return d>=app.fechaHora}}
