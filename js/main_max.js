@@ -213,7 +213,7 @@ var app = {
 
   formatRain: function(rain){
     if (rain !== "Ip") {
-        return `<div class='rain'>${rain} <span class="min">mm</span></div>`;
+        return `<div class='rain'>${rain}<span class="min">mm</span></div>`;
     }
     return `<div class='rain'>${rain}</div>`;
   },
