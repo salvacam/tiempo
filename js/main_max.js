@@ -214,7 +214,6 @@ var app = {
       return estado.periodo;
     }
       return estado.periodo + " h";
-    //return estado.periodo != undefined ? estado.periodo : "00-24 h";
   },
 
   formatDate: function(str) {
