@@ -124,6 +124,7 @@ var app = {
           exit += app.formatDate(element.fecha);
 
           exit += `<div class='card-container'>`;
+	  let primerDato = true;
           element.estadoCielo.forEach(function(estado, index) {
 
             // Se muestran los datos si el día en el que se recorre no es hoy
@@ -131,6 +132,11 @@ var app = {
             if (app.fechaHora.getDate() !== parseInt(element.fecha.substring(8,10)) || //Día distinto
               (estado.periodo === undefined || 
               (estado.periodo !== undefined && parseInt(estado.periodo.substring(3,5)) >= app.fechaHora.getHours()))) {
+	      if (!primerDato) {
+	       exit += `<div class="card-separator"></div>`;
+	      } else {
+	       primerDato = false;
+	      }
               exit += `<div class='card'>
                         <div class='card-row'>
                           <div class='temp'>${element.temperatura.maxima}/${element.temperatura.minima}º</div>
@@ -166,13 +172,18 @@ var app = {
 
 
           exit += `<div class='card-container'>`;
+	primerDato = true;
           element.estadoCielo.forEach(function(estado, index) {
             // Se muestran los datos si el día en el que se recorre no es hoy
             // o si es hoy pero la hora aún no ha pasado
             if (app.fechaHora.getDate() !== parseInt(element.fecha.substring(8,10)) || //Día distinto
               (app.fechaHora.getDate() === parseInt(element.fecha.substring(8,10)) &&
                  app.fechaHora.getHours() <= parseInt(estado.periodo))) {
-
+	if (!primerDato) {
+	       exit += `<div class="card-separator"></div>`;
+	      } else {
+	       primerDato = false;
+	      }
               exit += `<div class='card'>
                         <div class='card-row'>
                           <div class='temp'>${element.temperatura[index].value}º</div>
@@ -202,7 +213,7 @@ var app = {
 
   formatRain: function(rain){
     if (rain !== "Ip") {
-      rain += " mm";
+        return `<div class='rain'>${rain}<span class="min">mm</span></div>`;
     }
     return `<div class='rain'>${rain}</div>`;
   },
