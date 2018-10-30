@@ -150,8 +150,6 @@ var app = {
             }
           });
           exit += `</div>`;
-
-          //http://www.aemet.es/imagenes_gcd/_iconos_municipios/54.png
         }
       });
     }
