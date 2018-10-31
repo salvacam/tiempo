@@ -229,7 +229,7 @@ var app = {
     //str = "2018-10-22"
 	  let diaSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
 
-    return `<div class='titleDate'>${diaSemana[new Date(parseInt(a.substring(0, 4)),parseInt(a.substring(5, 7)) - 1,parseInt(a.substring(8, 10))).getDay()]} ${str.substring(8,10)}-${str.substring(5,7)}-${str.substring(0,4)}</div>`;
+    return `<div class='titleDate'>${diaSemana[new Date(parseInt(str.substring(0, 4)),parseInt(str.substring(5, 7)) - 1,parseInt(str.substring(8, 10))).getDay()]} ${str.substring(8,10)}-${str.substring(5,7)}-${str.substring(0,4)}</div>`;
   },
 
   compareDate: function(str) {
