@@ -150,9 +150,51 @@ var app = {
             }
           });
           exit += `</div>`;
+          let elementDay = app.myFindWhere(app.tiempo.dia, {fecha:element.fecha});
+          if (elementDay !== undefined) {
+            exit += `<div class='separator titleDate'>Por horas</div>`;
+            if (app.compareDate(elementDay.fecha)) {
+
+              exit += `<div class='horas'>`;
+              exit += `<div class='amanecer'>
+                        <span class='orto'>Amanecer: ${elementDay.orto}</span> 
+                        <span class='ocaso'>Puesta: ${elementDay.ocaso}</span></div>`;
+
+              exit += `<div class='card-container'>`;
+              primerDato = true;
+              elementDay.estadoCielo.forEach(function(estadoDay, index) {
+                // Se muestran los datos si el día en el que se recorre no es hoy
+                // o si es hoy pero la hora aún no ha pasado
+                if (app.fechaHora.getDate() !== parseInt(elementDay.fecha.substring(8,10)) || //Día distinto
+                  (app.fechaHora.getDate() === parseInt(elementDay.fecha.substring(8,10)) &&
+                     app.fechaHora.getHours() <= parseInt(estadoDay.periodo))) {
+                  if (!primerDato) {
+                    exit += `<div class="card-separator"></div>`;
+                  } else {
+                    primerDato = false;
+                  }
+                  exit += `<div class='card'>
+                            <div class='card-row'>
+                              <div class='temp'>${elementDay.temperatura[index].value}º</div>
+                              ${app.formatRain(elementDay.precipitacion[index].value)}
+                            </div>
+                            <div class='icon'><img alt="${estadoDay.descripcion}" 
+                              src="./img/weather/${estadoDay.value}_g.png"
+                              title="${estadoDay.descripcion}"></div>
+                            <div class='time'>${estadoDay.periodo}:00</div>
+                          </div>`;
+                }
+              });
+
+              exit += `</div>`;
+              exit += `</div>`;
+            }
+          }
         }
       });
     }
+
+    /*
     let datosSemana = false;
     if (exit !== "") {
       datosSemana = true;      
@@ -167,7 +209,6 @@ var app = {
           exit += `<div class='amanecer'>
                   <span class='orto'>Amanecer: ${element.orto}</span> 
                   <span class='ocaso'>Puesta: ${element.ocaso}</span></div>`;
-
 
           exit += `<div class='card-container'>`;
           primerDato = true;
@@ -202,6 +243,7 @@ var app = {
     if (datosSemana) {
       exit+="</div>";
     }
+    */
     return exit;
   },
 
@@ -228,7 +270,6 @@ var app = {
   formatDate: function(str) {
     //str = "2018-10-22"
 	  let diaSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-
     return `<div class='titleDate'>${diaSemana[new Date(parseInt(str.substring(0, 4)),parseInt(str.substring(5, 7)) - 1,parseInt(str.substring(8, 10))).getDay()]} ${str.substring(8,10)}-${str.substring(5,7)}-${str.substring(0,4)}</div>`;
   },
 
@@ -242,6 +283,11 @@ var app = {
       59
     );
     return d >= app.fechaHora;
+  },
+
+  //https://stackoverflow.com/questions/37301790/es6-equivalent-of-underscore-findwhere
+  myFindWhere: function(array, criteria) {
+    return array.find(item => Object.keys(criteria).every(key => item[key] === criteria[key]))
   }
 
 };
