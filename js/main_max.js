@@ -150,15 +150,16 @@ var app = {
             }
           });
           exit += `</div>`;
+
           let elementDay = app.myFindWhere(app.tiempo.dia, {fecha:element.fecha});
           if (elementDay !== undefined) {
-            exit += `<div class='separator titleDate'>Por horas</div>`;
             if (app.compareDate(elementDay.fecha)) {
 
-              exit += `<div class='horas'>`;
               exit += `<div class='amanecer'>
                         <span class='orto'>Amanecer: ${elementDay.orto}</span> 
-                        <span class='ocaso'>Puesta: ${elementDay.ocaso}</span></div>`;
+                        <span class='ocaso'>Puesta: ${elementDay.ocaso}</span></div>
+                      <div class='separator titleDate'>Por horas</div>
+                      <div class='horas'>`;
 
               exit += `<div class='card-container'>`;
               primerDato = true;
@@ -186,64 +187,14 @@ var app = {
                 }
               });
 
-              exit += `</div>`;
-              exit += `</div>`;
+              exit += `</div>
+                      </div>`;
             }
           }
         }
       });
     }
 
-    /*
-    let datosSemana = false;
-    if (exit !== "") {
-      datosSemana = true;      
-      exit += `<div class='separator titleDate' id='accionHoras'>Por horas</div>
-              <div class='hide' id='horas'>`;
-    }
-
-    app.tiempo.dia.forEach(function(element) {      
-        if (app.compareDate(element.fecha)) {
-          lastDay = element.fecha;
-          exit += app.formatDate(element.fecha);
-          exit += `<div class='amanecer'>
-                  <span class='orto'>Amanecer: ${element.orto}</span> 
-                  <span class='ocaso'>Puesta: ${element.ocaso}</span></div>`;
-
-          exit += `<div class='card-container'>`;
-          primerDato = true;
-          element.estadoCielo.forEach(function(estado, index) {
-            // Se muestran los datos si el día en el que se recorre no es hoy
-            // o si es hoy pero la hora aún no ha pasado
-            if (app.fechaHora.getDate() !== parseInt(element.fecha.substring(8,10)) || //Día distinto
-              (app.fechaHora.getDate() === parseInt(element.fecha.substring(8,10)) &&
-                 app.fechaHora.getHours() <= parseInt(estado.periodo))) {
-              if (!primerDato) {
-                exit += `<div class="card-separator"></div>`;
-              } else {
-                primerDato = false;
-              }
-              exit += `<div class='card'>
-                        <div class='card-row'>
-                          <div class='temp'>${element.temperatura[index].value}º</div>
-                          ${app.formatRain(element.precipitacion[index].value)}
-                        </div>
-                        <div class='icon'><img alt="${estado.descripcion}" 
-                          src="./img/weather/${estado.value}_g.png"
-                          title="${estado.descripcion}"></div>
-                        <div class='time'>${estado.periodo}:00</div>
-                      </div>`;
-            }
-          });
-
-          exit += `</div>`;
-        }
-      });
-
-    if (datosSemana) {
-      exit+="</div>";
-    }
-    */
     return exit;
   },
 
