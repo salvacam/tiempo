@@ -6,8 +6,6 @@ var app = {
     tiempo: null,
     fechaHora: new Date(),
     actualizar: document.getElementById('actualizar'),
-    accionHoras: undefined,
-  	horas: undefined,
     principalDiv: document.getElementById('principalDiv'),
 
     URL_SERVER: 'https://calcicolous-moonlig.000webhostapp.com/tiempo/index.php?id=',
@@ -96,10 +94,6 @@ var app = {
     if (app.tiempo.dia != undefined && app.tiempo.dia.length > 0) {      
       let noteItem = app.drawData();
       app.principalDiv.innerHTML = noteItem;
-
-      app.accionHoras = document.getElementById('accionHoras');
-      app.horas = document.getElementById('horas');
-      app.accionHoras.addEventListener('click', app.mostrarHoras);
     } else {
       // TODO aviso
       //alert('No carga');
@@ -196,10 +190,6 @@ var app = {
     }
 
     return exit;
-  },
-
-  mostrarHoras: function(estado) {
-    app.horas.classList.toggle('hide');
   },
 
   formatRain: function(rain){
