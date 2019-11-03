@@ -76,7 +76,7 @@ var app = {
 
   obtenerDatosGuardados: function() {
     app.actualizar.classList.remove('rotate');
-    app.encenderBoton();
+    //app.encenderBoton();
     app.modal.classList.remove('hide');    
     document.getElementById('closeModal').addEventListener('click', () => {
         app.modal.classList.add('hide');
