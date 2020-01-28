@@ -9,11 +9,11 @@ date_default_timezone_set('Europe/Madrid');
 
 $db = new JsonDB("./db/");
 
-
+/*
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-
+*/
 
 if (isset($_GET["listado"]) ) {
 		
@@ -77,10 +77,19 @@ if (count($datosGuardados) > 0) {
 	}
 }
 
+
+
 //Pedir los datos por horas
 $urlOpendata = "https://opendata.aemet.es/opendata/api/prediccion/especifica/municipio/horaria/" . $idCiudad .  "/?api_key=" . $apiKey;
 
 $result = file_get_contents($urlOpendata);
+if (!$result) {
+	$rtn = array("error" => "No se pueden obtener los datos :(");
+    http_response_code(200);
+    print json_encode($rtn);
+	die();
+}
+
 $codificado = utf8_encode($result);
 $jsonDatos = json_decode($codificado, true);
 
