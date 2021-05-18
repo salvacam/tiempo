@@ -131,7 +131,6 @@ var app = {
               } else {
                 primerDato = false;
               }
-              debugger;
               exit += `<div class='card'>
                         <div class='card-row'>
                           <div class='temp'>${element.temperatura.maxima}/${element.temperatura.minima}º</div>
@@ -171,7 +170,7 @@ var app = {
                   }
                   exit += `<div class='card'>
                             <div class='card-row'>
-                              <div class='temp'>${elementDay.temperatura[index].value != null ? elementDay.temperatura[index].value: ""}º</div>
+                              <div class='temp'>${elementDay.temperatura[index] == null || elementDay.temperatura[index].value == null ? "" : elementDay.temperatura[index].value}º</div>
                               ${app.formatRain(elementDay.precipitacion[index].value)}
                             </div>
                             <div class='icon'><img alt="${estadoDay.descripcion}" 
