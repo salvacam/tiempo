@@ -1,4 +1,4 @@
-var cacheName = 'tiempo-v0.0.05';
+var cacheName = 'tiempo-v0.0.06';
 
 var filesToCache = [
   './',
