@@ -8,7 +8,7 @@ var app = {
     actualizar: document.getElementById('actualizar'),
     principalDiv: document.getElementById('principalDiv'),
 
-    URL_SERVER: 'https://calcicolous-moonlig1.000webhostapp.com/tiempo/index.php?id=',
+    //URL_SERVER: 'https://calcicolous-moonlig1.000webhostapp.com/tiempo/index.php?id=',
     //URL_SERVER: 'http://localhost:1212/index.php?id=',
     URL_API: "https://opendata.aemet.es/opendata/api/prediccion/especifica/municipio/",
     API_KEY: 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYWx2YWNhbXNAZ21haWwuY29tIiwianRpIjoiYTU2ZjkzZWYtZmQyMS00YTY2LWIzYTctNDM1MzU0OGExZGM4IiwiaXNzIjoiQUVNRVQiLCJpYXQiOjE1Mzk5NTI1MzEsInVzZXJJZCI6ImE1NmY5M2VmLWZkMjEtNGE2Ni1iM2E3LTQzNTM1NDhhMWRjOCIsInJvbGUiOiIifQ.ZU_KjGW9u4hR3gWJdKWYxnPm4mOimVjjYHnCvVA_CC4',
@@ -51,7 +51,6 @@ var app = {
   realizarLlamada: function() {
     app.actualizar.removeEventListener('click', app.realizarLlamada);
     app.actualizar.classList.add('rotate');
-    //let request = new Request(app.URL_SERVER+'18087');
 
     var data = null;
 
@@ -63,138 +62,89 @@ var app = {
         console.log(this.responseText);
         var myArr = JSON.parse(this.responseText);
 
-		let request = myArr.datos;	    
+		    let request = myArr.datos;	    
 
-	    fetch(request).then((results) => {
-	      if (results.status === 200){
-	        results
-	          .json()
-	          .then(( str ) => {
+  	    fetch(request).then((results) => {
+  	      if (results.status === 200){
+  	        results
+  	          .json()
+  	          .then(( str ) => {
 
-	        	let horaActual = app.fechaHora.getTime();
-		        horaActual = horaActual.toString();
-		        horaActual = horaActual.slice(0,-3);
-		        horaActual = Number(horaActual);
+    	        	let horaActual = app.fechaHora.getTime();
+    		        horaActual = horaActual.toString();
+    		        horaActual = horaActual.slice(0,-3);
+    		        horaActual = Number(horaActual);
 
-	          	app.tiempo = {
-				  "id": "18087",
-				  "nombre": "Granada",
-				  "hora": horaActual,
-				  "dia": str[0].prediccion.dia,
-				  "semana": null
-  				};
+  	          	app.tiempo = {
+      				  "id": "18087",
+      				  "nombre": "Granada",
+      				  "hora": horaActual,
+      				  "dia": str[0].prediccion.dia,
+      				  "semana": null
+        				};
 
-  				var data2 = null;
+        				var data2 = null;
 
-    			var xhr2 = new XMLHttpRequest();
-			    xhr2.withCredentials = true;
+          			var xhr2 = new XMLHttpRequest();
+      			    xhr2.withCredentials = true;
 
-			    xhr2.addEventListener("readystatechange", function () {
-			      if (this.readyState === 4) {
-			        console.log(this.responseText);
-			        var myArr = JSON.parse(this.responseText);
-					let request = myArr.datos;	    
+      			    xhr2.addEventListener("readystatechange", function () {
+      			      if (this.readyState === 4) {
+      			         //console.log(this.responseText);
+      			         var myArr = JSON.parse(this.responseText);
+      					     let request = myArr.datos;	    
 
-				    fetch(request).then((results) => {
-				      if (results.status === 200){
-				        results
-				          .json()
-				          .then(( str ) => {
+        				    fetch(request).then((results) => {
+        				      if (results.status === 200){
+        				        results
+        				          .json()
+        				          .then(( str ) => {
 
-				          	app.tiempo.semana = str[0].prediccion.dia;
-				            localStorage.setItem("_tiempo", JSON.stringify(app.tiempo));
-				            app.drawTable();
-				          })
-				          .catch(function() {
-				            //console.log('error al formatear los datos');
-				            app.obtenerDatosGuardados();
-				          });
-				      } else {      
-				        //console.log('error al obtener los datos');
-				        app.obtenerDatosGuardados();        
-				      }
-				    })
-				    .catch(function() {
-				      //console.log('error al obtener los datos');
-				      app.obtenerDatosGuardados();      
-				    });
-			      }
-			    });
-				
+        				          	app.tiempo.semana = str[0].prediccion.dia;
+        				            localStorage.setItem("_tiempo", JSON.stringify(app.tiempo));
+        				            app.drawTable();
+        				          })
+        				          .catch(function() {
+        				            //console.log('error al formatear los datos');
+        				            app.obtenerDatosGuardados();
+        				          });
+        				      } else {      
+        				        //console.log('error al obtener los datos');
+        				        app.obtenerDatosGuardados();        
+        				      }
+        				    })
+        				    .catch(function() {
+        				      //console.log('error al obtener los datos');
+        				      app.obtenerDatosGuardados();      
+        				    });
+                  
+      			      }
+      			    });
+    			    
+      			    xhr2.open("GET", app.URL_API + "diaria/18087/?api_key=" + app.API_KEY);
+      			    xhr2.setRequestHeader("cache-control", "no-cache");
+      			    xhr2.send(data);
 
-				//Esto se guarda en dia
-				//https://opendata.aemet.es/opendata/api/prediccion/especifica/municipio/horaria/" . $idCiudad .  "/?api_key=" . $apiKey;
-
-				//Esto se guarda en semana
-				//https://opendata.aemet.es/opendata/api/prediccion/especifica/municipio/diaria/" . $idCiudad .  "/?api_key=" . $apiKey;  
-			    
-			    //xhr.open("GET", app.URL_API + "horaria/18087/?api_key=" + app.API_KEY);
-			    xhr2.open("GET", app.URL_API + "diaria/18087/?api_key=" + app.API_KEY);
-			    xhr2.setRequestHeader("cache-control", "no-cache");
-			    xhr2.send(data);
-	          	/*
-
-	            localStorage.setItem("_tiempo", JSON.stringify(str));
-	            app.tiempo = str;
-	            app.drawTable();
-	            */
-	          })
-	          .catch(function() {
-	            //console.log('error al formatear los datos');
-	            app.obtenerDatosGuardados();
-	          });
-	      } else {      
-	        //console.log('error al obtener los datos');
-	        app.obtenerDatosGuardados();        
-	      }
-	    })
-	    .catch(function() {
-	      //console.log('error al obtener los datos');
-	      app.obtenerDatosGuardados();      
-	    });
+  	          })
+  	          .catch(function() {
+  	            //console.log('error al formatear los datos');
+  	            app.obtenerDatosGuardados();
+  	          });
+  	      } else {      
+  	        //console.log('error al obtener los datos');
+  	        app.obtenerDatosGuardados();        
+  	      }
+  	    })
+  	    .catch(function() {
+  	      //console.log('error al obtener los datos');
+  	      app.obtenerDatosGuardados();      
+  	    });
       }
     });
-	
-
-	//Esto se guarda en dia
-	//https://opendata.aemet.es/opendata/api/prediccion/especifica/municipio/horaria/" . $idCiudad .  "/?api_key=" . $apiKey;
-
-	//Esto se guarda en semana
-	//https://opendata.aemet.es/opendata/api/prediccion/especifica/municipio/diaria/" . $idCiudad .  "/?api_key=" . $apiKey;  
-    
+	    
     xhr.open("GET", app.URL_API + "horaria/18087/?api_key=" + app.API_KEY);
-    //xhr.open("GET", app.URL_API + "diaria/18087/?api_key=" + app.API_KEY);
     xhr.setRequestHeader("cache-control", "no-cache");
     xhr.send(data);
-
-
-
-    
-
-	/*
-    fetch(request).then((results) => {
-      if (results.status === 200){
-        results
-          .json()
-          .then(( str ) => {
-            localStorage.setItem("_tiempo", JSON.stringify(str));
-            app.tiempo = str;
-            app.drawTable();
-          })
-          .catch(function() {
-            //console.log('error al formatear los datos');
-            app.obtenerDatosGuardados();
-          });
-      } else {      
-        //console.log('error al obtener los datos');
-        app.obtenerDatosGuardados();        
-      }
-    })
-    .catch(function() {
-      //console.log('error al obtener los datos');
-      app.obtenerDatosGuardados();      
-    });
-    */
   },
 
   obtenerDatosGuardados: function() {
