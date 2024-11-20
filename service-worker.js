@@ -1,4 +1,4 @@
-var cacheName = 'tiempo-v0.0.06';
+var cacheName = 'tiempo-v0.0.07';
 
 var filesToCache = [
   './',
@@ -72,7 +72,10 @@ var filesToCache = [
   './img/weather/73_g.png',
   './img/weather/73n_g.png',
   './img/weather/74_g.png',
-  './img/weather/74n_g.png'
+  './img/weather/74n_g.png',
+  './img/weather/82n_g.png',
+  './img/weather/82_g.png',
+  './img/weather/82.png'
 ];
 
 self.addEventListener('install', function(e) {
