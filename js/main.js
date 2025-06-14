@@ -55,7 +55,7 @@ var app = {
     var data = null;
 
     var xhr = new XMLHttpRequest();
-    xhr.withCredentials = true;
+    //xhr.withCredentials = true;
 
     xhr.addEventListener("readystatechange", function () {
       if (this.readyState === 4) {
@@ -86,7 +86,7 @@ var app = {
         				var data2 = null;
 
           			var xhr2 = new XMLHttpRequest();
-      			    xhr2.withCredentials = true;
+      			    //xhr2.withCredentials = true;
 
       			    xhr2.addEventListener("readystatechange", function () {
       			      if (this.readyState === 4) {
