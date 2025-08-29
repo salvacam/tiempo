@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-  	app.init();
+    app.init();
 });
 
 var app = {  
@@ -8,143 +8,70 @@ var app = {
     actualizar: document.getElementById('actualizar'),
     principalDiv: document.getElementById('principalDiv'),
 
-    //URL_SERVER: 'https://calcicolous-moonlig1.000webhostapp.com/tiempo/index.php?id=',
+    URL_SERVER: 'https://salvacam.x10.mx/tiempo/backend/index.php?id=',
     //URL_SERVER: 'http://localhost:1212/index.php?id=',
-    URL_API: "https://opendata.aemet.es/opendata/api/prediccion/especifica/municipio/",
-    API_KEY: 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYWx2YWNhbXNAZ21haWwuY29tIiwianRpIjoiYTU2ZjkzZWYtZmQyMS00YTY2LWIzYTctNDM1MzU0OGExZGM4IiwiaXNzIjoiQUVNRVQiLCJpYXQiOjE1Mzk5NTI1MzEsInVzZXJJZCI6ImE1NmY5M2VmLWZkMjEtNGE2Ni1iM2E3LTQzNTM1NDhhMWRjOCIsInJvbGUiOiIifQ.ZU_KjGW9u4hR3gWJdKWYxnPm4mOimVjjYHnCvVA_CC4',
 
-  	modal: document.getElementById('modal'),
+    modal: document.getElementById('modal'),
 
-  	init: function() {
+    init: function() {
 
-    	if(localStorage.getItem("_tiempo")){
-	        app.tiempo = JSON.parse(localStorage.getItem("_tiempo"));
-	        app.drawTable();
+      if(localStorage.getItem("_tiempo")){
+        app.tiempo = JSON.parse(localStorage.getItem("_tiempo"));
+        app.drawTable();
 
-	        // JS devuelve la hora actual en milisegundos, en PHP lo devuelve en segundos
-	        // la hora la paso a String le quito los 3 últimos caracteres y lo paso a número
-	        let horaActual = app.fechaHora.getTime();
-	        horaActual = horaActual.toString();
-	        horaActual = horaActual.slice(0,-3);
-	        horaActual = Number(horaActual);
-	        
-	        //Two hours, 60 seg * 60 min * 2 hour
-	        if (horaActual > (app.tiempo.hora + 7200)) {
-	            app.realizarLlamada();            
-	        }
+        // JS devuelve la hora actual en milisegundos, en PHP lo devuelve en segundos
+        // la hora la paso a String le quito los 3 últimos caracteres y lo paso a número
+        let horaActual = app.fechaHora.getTime();
+        horaActual = horaActual.toString();
+        horaActual = horaActual.slice(0,-3);
+        horaActual = Number(horaActual);
+        
+        //Two hours, 60 seg * 60 min * 2 hour
+        if (horaActual > (app.tiempo.hora + 7200)) {
+            app.realizarLlamada();            
+        }
+      } else {
+        app.realizarLlamada();
+      }
 
-	    } else {
-	    	app.realizarLlamada();
-	    }
+      app.actualizar.addEventListener('click', app.realizarLlamada);      
 
-    	app.actualizar.addEventListener('click', app.realizarLlamada);
-
-  		if ('serviceWorker' in navigator) {
-    		navigator.serviceWorker
-      		.register('service-worker.js')
-      		.then(function() {
-        		//console.log('Service Worker Registered');
-        	});
-  		}
-	},
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker
+          .register('service-worker.js')
+          .then(function() {
+            //console.log('Service Worker Registered');
+          });
+      }
+  },
 
   realizarLlamada: function() {
     app.actualizar.removeEventListener('click', app.realizarLlamada);
     app.actualizar.classList.add('rotate');
+    let request = new Request(app.URL_SERVER+'18087');
 
-    var data = null;
-
-    var xhr = new XMLHttpRequest();
-    //xhr.withCredentials = true;
-
-    xhr.addEventListener("readystatechange", function () {
-      if (this.readyState === 4) {
-        console.log(this.responseText);
-        var myArr = JSON.parse(this.responseText);
-
-		    let request = myArr.datos;	    
-
-  	    fetch(request).then((results) => {
-  	      if (results.status === 200){
-  	        results
-  	          .json()
-  	          .then(( str ) => {
-
-    	        	let horaActual = app.fechaHora.getTime();
-    		        horaActual = horaActual.toString();
-    		        horaActual = horaActual.slice(0,-3);
-    		        horaActual = Number(horaActual);
-
-  	          	app.tiempo = {
-      				  "id": "18087",
-      				  "nombre": "Granada",
-      				  "hora": horaActual,
-      				  "dia": str[0].prediccion.dia,
-      				  "semana": null
-        				};
-
-        				var data2 = null;
-
-          			var xhr2 = new XMLHttpRequest();
-      			    //xhr2.withCredentials = true;
-
-      			    xhr2.addEventListener("readystatechange", function () {
-      			      if (this.readyState === 4) {
-      			         //console.log(this.responseText);
-      			         var myArr = JSON.parse(this.responseText);
-      					     let request = myArr.datos;	    
-
-        				    fetch(request).then((results) => {
-        				      if (results.status === 200){
-        				        results
-        				          .json()
-        				          .then(( str ) => {
-
-        				          	app.tiempo.semana = str[0].prediccion.dia;
-        				            localStorage.setItem("_tiempo", JSON.stringify(app.tiempo));
-        				            app.drawTable();
-        				          })
-        				          .catch(function() {
-        				            //console.log('error al formatear los datos');
-        				            app.obtenerDatosGuardados();
-        				          });
-        				      } else {      
-        				        //console.log('error al obtener los datos');
-        				        app.obtenerDatosGuardados();        
-        				      }
-        				    })
-        				    .catch(function() {
-        				      //console.log('error al obtener los datos');
-        				      app.obtenerDatosGuardados();      
-        				    });
-                  
-      			      }
-      			    });
-    			    
-      			    xhr2.open("GET", app.URL_API + "diaria/18087/?api_key=" + app.API_KEY);
-      			    xhr2.setRequestHeader("cache-control", "no-cache");
-      			    xhr2.send(data);
-
-  	          })
-  	          .catch(function() {
-  	            //console.log('error al formatear los datos');
-  	            app.obtenerDatosGuardados();
-  	          });
-  	      } else {      
-  	        //console.log('error al obtener los datos');
-  	        app.obtenerDatosGuardados();        
-  	      }
-  	    })
-  	    .catch(function() {
-  	      //console.log('error al obtener los datos');
-  	      app.obtenerDatosGuardados();      
-  	    });
+    fetch(request).then((results) => {
+      if (results.status === 200){
+        results
+          .json()
+          .then(( str ) => {
+            localStorage.setItem("_tiempo", JSON.stringify(str));
+            app.tiempo = str;
+            app.drawTable();
+          })
+          .catch(function() {
+            //console.log('error al formatear los datos');
+            app.obtenerDatosGuardados();
+          });
+      } else {      
+        //console.log('error al obtener los datos');
+        app.obtenerDatosGuardados();        
       }
+    })
+    .catch(function() {
+      //console.log('error al obtener los datos');
+      app.obtenerDatosGuardados();      
     });
-	    
-    xhr.open("GET", app.URL_API + "horaria/18087/?api_key=" + app.API_KEY);
-    xhr.setRequestHeader("cache-control", "no-cache");
-    xhr.send(data);
   },
 
   obtenerDatosGuardados: function() {
@@ -283,7 +210,7 @@ var app = {
 
   formatDate: function(str) {
     //str = "2018-10-22"
-	  let diaSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    let diaSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
     return `<div class='titleDate'>${diaSemana[new Date(parseInt(str.substring(0, 4)),parseInt(str.substring(5, 7)) - 1,parseInt(str.substring(8, 10))).getDay()]} ${str.substring(8,10)}-${str.substring(5,7)}-${str.substring(0,4)}</div>`;
   },
 
