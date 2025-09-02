@@ -15,7 +15,7 @@ var app = {
     modal: document.getElementById('modal'),
 
     init: function() {
-      debugger;
+      //debugger;
 
       if(localStorage.getItem("_tiempo")){
         app.tiempo = JSON.parse(localStorage.getItem("_tiempo"));
