@@ -9,11 +9,13 @@ var app = {
     principalDiv: document.getElementById('principalDiv'),
 
     URL_SERVER: 'https://salvacam.x10.mx/tiempo/backend/index.php?id=',
+    //URL_SERVER: 'http://localhost:8000/backend/index.php?id=',
     //URL_SERVER: 'http://localhost:1212/index.php?id=',
 
     modal: document.getElementById('modal'),
 
     init: function() {
+      debugger;
 
       if(localStorage.getItem("_tiempo")){
         app.tiempo = JSON.parse(localStorage.getItem("_tiempo"));
@@ -55,9 +57,13 @@ var app = {
         results
           .json()
           .then(( str ) => {
-            localStorage.setItem("_tiempo", JSON.stringify(str));
-            app.tiempo = str;
-            app.drawTable();
+            if(!str.error) {
+              localStorage.setItem("_tiempo", JSON.stringify(str));
+              app.tiempo = str;
+              app.drawTable();
+            } else {
+              app.obtenerDatosGuardados();
+            }
           })
           .catch(function() {
             //console.log('error al formatear los datos');
