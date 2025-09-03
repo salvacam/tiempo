@@ -68,11 +68,11 @@ $fechaHoraActual = $now->getTimestamp();
 $datosGuardados = $db->select("ciudad", "id", $idCiudad);
 if (count($datosGuardados) > 0) {
 		
-	$fechaHoraLimite = $datosGuardados[0]["hora"] + 7200; //Two hours, 60 seg * 60 min * 2 hour
+	$fechaHoraLimite = $datosGuardados[count($datosGuardados)-1]["hora"] + 14400; //Four hours, 60 seg * 60 min * 4 hour
 	if ($fechaHoraLimite > $fechaHoraActual) {
 		// Devolver lo guardado		
 		http_response_code(200);
-		echo json_encode($datosGuardados[0]);
+		echo json_encode($datosGuardados[count($datosGuardados)-1]);
 		die();
 	}
 }
@@ -141,6 +141,7 @@ if (array_key_exists("prediccion",$jsonDatos[0]) && array_key_exists("dia",$json
 // Guardar fecha y hora cuando se realiza la llamada
 $lista = array('id'=>$idCiudad, 'nombre'=> $nombre, 'hora'=>$fechaHoraActual, 'dia' => $dia, 'semana' => $semana);
 
+$db->delete("ciudad", "id", $idCiudad);
 // Guardar resultado procesado de la llamada
 $db->insert("ciudad", $lista, true);
 
